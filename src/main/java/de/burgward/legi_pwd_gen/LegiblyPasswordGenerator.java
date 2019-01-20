@@ -28,25 +28,36 @@ import java.util.Vector;
  * - but without hardly distinguishable ones like l, 1, O, 0<br/>
  * - the output of each password is split up after four characters for a better
  * readability<br/>
- * - the first six characters contain at least one character of each group of
- * characters, because some systems do not store larger passwords<br/>
+ * - the first n(default six) characters contain at least one character of each
+ * group of characters, because some systems do not store larger passwords<br/>
  * - every password starts with letters, because some systems cannot handle
  * digits or special signs at the start<br/>
  * - in one single password is no character more than ones<br/>
  * - the randomness is large enough, that the passwords are very unique
  * 
- * @version 0.1.0
+ * @version 0.1.1
  */
 public class LegiblyPasswordGenerator {
 
 	private final static int TOTAL_NUMBER_OF_PASSWORDS = 30;
 
-	private final static String[] GRP_LOWER = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "m", "n", "p",
-			"q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
-	private final static String[] GRP_UPPER = { "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P",
-			"Q", "R", "T", "U", "V", "W", "X", "Y", "Z" };
-	private final static String[] GRP_DIGITS = { "2", "3", "4", "6", "7", "8", "9" };
-	private final static String[] GRP_SPECIAL = { "#", "+", ".", "-", ":", "_", "=" };
+	private final static int LENGTH_OF_PASSWORD = 13;
+
+	/**
+	 * the first n(default six) characters contain at least one character of
+	 * each group of characters, because some systems do not store larger
+	 * passwords
+	 */
+	private final static int LENGTH_OF_FIRST_PART = 6;
+
+	private final static int SPACES_EVERY_N_CHARS = 4;
+
+	private final static String[] LOWER = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "m", "n", "p", "q",
+			"r", "s", "t", "u", "v", "w", "x", "y", "z" };
+	private final static String[] UPPER = { "A", "B", "C", "D", "E", "F", "G", "H", "J", "K", "L", "M", "N", "P", "Q",
+			"R", "T", "U", "V", "W", "X", "Y", "Z" };
+	private final static String[] DIGITS = { "2", "3", "4", "6", "7", "8", "9" };
+	private final static String[] SPECIAL = { "#", "+", ".", "-", ":", "_", "=" };
 
 	public static void main(String[] args) {
 		System.out.println("START");
@@ -90,19 +101,19 @@ public class LegiblyPasswordGenerator {
 
 		String firstChar = password[0];
 
-		boolean isInGroup0First = this.isInGroup(firstChar, LegiblyPasswordGenerator.GRP_LOWER);
-		boolean isInGroup1First = this.isInGroup(firstChar, LegiblyPasswordGenerator.GRP_UPPER);
+		boolean isInGroup0First = this.isInGroup(firstChar, LegiblyPasswordGenerator.LOWER);
+		boolean isInGroup1First = this.isInGroup(firstChar, LegiblyPasswordGenerator.UPPER);
 
 		return isInGroup0First || isInGroup1First;
 	}
 
 	private boolean isEveryGroupInFirstSixCharacters(String[] password) {
-		String[] firstSixChars = Arrays.copyOf(password, 6);
+		String[] firstChars = Arrays.copyOf(password, LegiblyPasswordGenerator.LENGTH_OF_FIRST_PART);
 
-		boolean isInGroup0 = this.isOneInGroup(firstSixChars, LegiblyPasswordGenerator.GRP_LOWER);
-		boolean isInGroup1 = this.isOneInGroup(firstSixChars, LegiblyPasswordGenerator.GRP_UPPER);
-		boolean isInGroup2 = this.isOneInGroup(firstSixChars, LegiblyPasswordGenerator.GRP_DIGITS);
-		boolean isInGroup3 = this.isOneInGroup(firstSixChars, LegiblyPasswordGenerator.GRP_SPECIAL);
+		boolean isInGroup0 = this.isOneInGroup(firstChars, LegiblyPasswordGenerator.LOWER);
+		boolean isInGroup1 = this.isOneInGroup(firstChars, LegiblyPasswordGenerator.UPPER);
+		boolean isInGroup2 = this.isOneInGroup(firstChars, LegiblyPasswordGenerator.DIGITS);
+		boolean isInGroup3 = this.isOneInGroup(firstChars, LegiblyPasswordGenerator.SPECIAL);
 
 		return isInGroup0 && isInGroup1 && isInGroup2 && isInGroup3;
 	}
@@ -139,24 +150,18 @@ public class LegiblyPasswordGenerator {
 
 	private void printPasswords(Vector<String> passwords) {
 		for (String pw : passwords) {
-
-			// TODO smarter logic to split by four characters
-			String p0 = pw.substring(0, 1) + pw.substring(1, 2) + pw.substring(2, 3) + pw.substring(3, 4);
-			String p1 = pw.substring(4, 5) + pw.substring(5, 6) + pw.substring(6, 7) + pw.substring(7, 8);
-			String p2 = pw.substring(8, 9) + pw.substring(9, 10) + pw.substring(10, 11) + pw.substring(11, 12);
-			String p3 = pw.substring(12, 13);
-
-			System.out.println(p0 + " " + p1 + " " + p2 + " " + p3);
+			String withSpaces = this.withSpacesEveryFourChars(pw);
+			System.out.println(withSpaces);
 		}
 	}
 
 	private String createNewPassword(Vector<String> allCharacters) {
-		String[] password = new String[13];
+		String[] password = new String[LegiblyPasswordGenerator.LENGTH_OF_PASSWORD];
 
 		boolean isGoodPassword = false;
 		while (!isGoodPassword) {
-			password = new String[13];
-			for (int i = 0; i < 13; i++) {
+			password = new String[LegiblyPasswordGenerator.LENGTH_OF_PASSWORD];
+			for (int i = 0; i < LegiblyPasswordGenerator.LENGTH_OF_PASSWORD; i++) {
 				int rnd = new Random().nextInt(allCharacters.size());
 				password[i] = allCharacters.get(rnd);
 			}
@@ -169,10 +174,10 @@ public class LegiblyPasswordGenerator {
 	private Vector<String> concatAllCharacterGroups() {
 		Vector<String> vector = new Vector<String>();
 
-		this.addGroupToVector(LegiblyPasswordGenerator.GRP_LOWER, vector);
-		this.addGroupToVector(LegiblyPasswordGenerator.GRP_UPPER, vector);
-		this.addGroupToVector(LegiblyPasswordGenerator.GRP_DIGITS, vector);
-		this.addGroupToVector(LegiblyPasswordGenerator.GRP_SPECIAL, vector);
+		this.addGroupToVector(LegiblyPasswordGenerator.LOWER, vector);
+		this.addGroupToVector(LegiblyPasswordGenerator.UPPER, vector);
+		this.addGroupToVector(LegiblyPasswordGenerator.DIGITS, vector);
+		this.addGroupToVector(LegiblyPasswordGenerator.SPECIAL, vector);
 
 		return vector;
 	}
@@ -190,6 +195,25 @@ public class LegiblyPasswordGenerator {
 			}
 		}
 		return false;
+	}
+
+	private String withSpacesEveryFourChars(String stringToSplit) {
+		if (stringToSplit != null && stringToSplit.length() > LegiblyPasswordGenerator.SPACES_EVERY_N_CHARS) {
+			stringToSplit = stringToSplit.trim();
+
+			StringBuilder builder = new StringBuilder();
+			int fourthCount = 0;
+			for (int i = 0; i < stringToSplit.length(); i++) {
+				builder.append(stringToSplit.substring(i, i + 1));
+				fourthCount++;
+				if (fourthCount == LegiblyPasswordGenerator.SPACES_EVERY_N_CHARS) {
+					builder.append(" ");
+					fourthCount = 0;
+				}
+			}
+			stringToSplit = builder.toString();
+		}
+		return stringToSplit;
 	}
 
 	private void sysoutCopyright() {
