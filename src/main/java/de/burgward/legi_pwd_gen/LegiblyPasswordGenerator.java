@@ -35,7 +35,7 @@ import java.util.Vector;
  * - in one single password is no character more than ones<br/>
  * - the randomness is large enough, that the passwords are very unique
  * 
- * @version 0.1.2
+ * @version 0.1.3
  */
 public class LegiblyPasswordGenerator {
 
@@ -56,7 +56,7 @@ public class LegiblyPasswordGenerator {
 		System.out.println("START");
 		System.out.println(" ");
 
-		Vector<String> passwords = new LegiblyPasswordGenerator().generateAllPasswords();
+		Vector<String> passwords = new LegiblyPasswordGenerator().generatePasswords(TOTAL_NUMBER_OF_PASSWORDS);
 
 		SystemOutput.sysoutPasswords(passwords);
 
@@ -116,10 +116,10 @@ public class LegiblyPasswordGenerator {
 		return singleChars.size() == password.length;
 	}
 
-	public Vector<String> generateAllPasswords() {
+	public Vector<String> generatePasswords(int amount) {
 		HashMap<String, String> passwords = new HashMap<String, String>();
 
-		while (passwords.size() < TOTAL_NUMBER_OF_PASSWORDS) {
+		while (passwords.size() < amount) {
 			String newPw = generatePassword();
 			passwords.put(newPw, newPw);
 		}
