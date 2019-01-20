@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
-package de.burgward.legibly_pw_gen;
+package de.burgward.legi_pwd_gen;
 
 import java.util.Arrays;
 import java.util.HashMap;
