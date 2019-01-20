@@ -56,7 +56,7 @@ public class LegiblyPasswordGenerator {
 		System.out.println("START");
 		System.out.println(" ");
 
-		Vector<String> passwords = new LegiblyPasswordGenerator().createAllPasswords();
+		Vector<String> passwords = new LegiblyPasswordGenerator().generateAllPasswords();
 
 		SystemOutput.sysoutPasswords(passwords);
 
@@ -116,7 +116,7 @@ public class LegiblyPasswordGenerator {
 		return singleChars.size() == password.length;
 	}
 
-	private Vector<String> createAllPasswords() {
+	public Vector<String> generateAllPasswords() {
 		HashMap<String, String> passwords = new HashMap<String, String>();
 
 		while (passwords.size() < TOTAL_NUMBER_OF_PASSWORDS) {
