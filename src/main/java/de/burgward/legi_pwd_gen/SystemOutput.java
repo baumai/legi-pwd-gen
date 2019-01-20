@@ -32,22 +32,22 @@ public class SystemOutput {
 		}
 	}
 
-	private static String withSpaces(String stringToSplit) {
-		if (stringToSplit != null && stringToSplit.length() > SPACES_EVERY_N_CHARS) {
+	private static String withSpaces(String password) {
+		if (password != null && password.length() > SPACES_EVERY_N_CHARS) {
 
 			StringBuilder builder = new StringBuilder();
 			int fourthCount = 0;
-			for (int i = 0; i < stringToSplit.length(); i++) {
-				builder.append(stringToSplit.substring(i, i + 1));
+			for (int i = 0; i < password.length(); i++) {
+				builder.append(password.substring(i, i + 1));
 				fourthCount++;
 				if (fourthCount == SPACES_EVERY_N_CHARS) {
 					builder.append(" ");
 					fourthCount = 0;
 				}
 			}
-			stringToSplit = builder.toString();
+			password = builder.toString();
 		}
-		return stringToSplit;
+		return password;
 	}
 
 	public static void sysoutCopyright() {
