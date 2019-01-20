@@ -35,7 +35,7 @@ import java.util.Vector;
  * - in one single password is no character more than ones<br/>
  * - the randomness is large enough, that the passwords are very unique
  * 
- * @version 0.1.3
+ * @version 0.1.4
  */
 public class LegiblyPasswordGenerator {
 
@@ -48,11 +48,11 @@ public class LegiblyPasswordGenerator {
 	private final Vector<String> allCharacters;
 
 	public LegiblyPasswordGenerator() {
+		SystemOutput.sysoutCopyright();
 		allCharacters = CharacterSet.concatOfAllCharacters();
 	}
 
 	public static void main(String[] args) {
-		SystemOutput.sysoutCopyright();
 		System.out.println("START");
 		System.out.println(" ");
 
@@ -62,6 +62,34 @@ public class LegiblyPasswordGenerator {
 
 		System.out.println(" ");
 		System.out.println("END");
+	}
+
+	public String generatePassword() {
+		String[] password = new String[LENGTH_OF_PASSWORD];
+
+		boolean isGoodPassword = false;
+		while (!isGoodPassword) {
+			password = new String[LENGTH_OF_PASSWORD];
+			for (int i = 0; i < LENGTH_OF_PASSWORD; i++) {
+				password[i] = getSingleRandomCharacter();
+			}
+			isGoodPassword = isGood(password);
+		}
+
+		return String.join("", password);
+	}
+
+	public Vector<String> generatePasswords(int amount) {
+		HashMap<String, String> passwords = new HashMap<String, String>();
+
+		while (passwords.size() < amount) {
+			String newPw = generatePassword();
+			passwords.put(newPw, newPw);
+		}
+
+		Vector<String> vector = new Vector<String>();
+		vector.addAll(passwords.values());
+		return vector;
 	}
 
 	private boolean isGood(String[] password) {
@@ -114,34 +142,6 @@ public class LegiblyPasswordGenerator {
 			singleChars.put(str, str);
 		}
 		return singleChars.size() == password.length;
-	}
-
-	public Vector<String> generatePasswords(int amount) {
-		HashMap<String, String> passwords = new HashMap<String, String>();
-
-		while (passwords.size() < amount) {
-			String newPw = generatePassword();
-			passwords.put(newPw, newPw);
-		}
-
-		Vector<String> vector = new Vector<String>();
-		vector.addAll(passwords.values());
-		return vector;
-	}
-
-	public String generatePassword() {
-		String[] password = new String[LENGTH_OF_PASSWORD];
-
-		boolean isGoodPassword = false;
-		while (!isGoodPassword) {
-			password = new String[LENGTH_OF_PASSWORD];
-			for (int i = 0; i < LENGTH_OF_PASSWORD; i++) {
-				password[i] = getSingleRandomCharacter();
-			}
-			isGoodPassword = isGood(password);
-		}
-
-		return String.join("", password);
 	}
 
 	private String getSingleRandomCharacter() {

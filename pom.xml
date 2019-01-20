@@ -21,7 +21,7 @@ along with LegiblyPasswordGenerator.  If not, see <https://www.gnu.org/licenses/
   <modelVersion>4.0.0</modelVersion>
   <groupId>de.burgward</groupId>
   <artifactId>legi_pwd_gen</artifactId>
-  <version>0.1.3-SNAPSHOT</version>
+  <version>0.1.4-SNAPSHOT</version>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <plugins>
